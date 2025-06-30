@@ -29,7 +29,7 @@ public class VehiculoDTO {
     @Min(value = 1900, message = "El año debe ser mayor a 1900")
     @Max(value = 2030, message = "El año no puede ser mayor al año actual más 5")
     @Schema(description = "Año de fabricación del vehículo", example = "2023")
-    private Integer anio;
+    private String anio;
 
     @NotNull(message = "El valor es requerido")
     @DecimalMin(value = "0.0", message = "El valor no puede ser negativo")

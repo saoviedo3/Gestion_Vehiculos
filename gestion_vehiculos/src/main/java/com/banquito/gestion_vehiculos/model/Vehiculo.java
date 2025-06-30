@@ -22,7 +22,7 @@ public class Vehiculo {
     private String marca;
     private String modelo;
     private double cilindraje;
-    private int anio;
+    private String anio;
     private BigDecimal valor;
     private String color;
     private String extras;
