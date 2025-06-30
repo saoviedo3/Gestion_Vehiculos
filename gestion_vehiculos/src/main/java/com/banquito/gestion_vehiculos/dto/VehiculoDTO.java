@@ -2,9 +2,9 @@ package com.banquito.gestion_vehiculos.dto;
 
 import java.math.BigDecimal;
 
-import com.banquito.gestion_vehiculos.enums.CombustibleVehiculoEnum;
 import com.banquito.gestion_vehiculos.enums.EstadoVehiculoEnum;
 import com.banquito.gestion_vehiculos.enums.TipoVehiculoEnum;
+import com.banquito.gestion_vehiculos.enums.CombustibleVehiculoEnum;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
@@ -65,5 +65,20 @@ public class VehiculoDTO {
     @Schema(description = "Versión para control de concurrencia", example = "1")
     private Long version;
 
-    private IdentificadorVehiculoDTO identificadorVehiculo;
+    private Identificador identificadorVehiculo;
+
+    public static class Identificador {
+        private String placa;
+        private String chasis;
+        private String motor;
+        public String getPlaca() { return placa; }
+        public void setPlaca(String placa) { this.placa = placa; }
+        public String getChasis() { return chasis; }
+        public void setChasis(String chasis) { this.chasis = chasis; }
+        public String getMotor() { return motor; }
+        public void setMotor(String motor) { this.motor = motor; }
+    }
+
+    public Identificador getIdentificadorVehiculo() { return identificadorVehiculo; }
+    public void setIdentificadorVehiculo(Identificador identificadorVehiculo) { this.identificadorVehiculo = identificadorVehiculo; }
 }

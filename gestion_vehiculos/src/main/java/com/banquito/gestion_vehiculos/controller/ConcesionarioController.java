@@ -55,13 +55,48 @@ public class ConcesionarioController {
         return ResponseEntity.ok(concesionarioService.desactivateConcesionario(ruc));
     }
 
-    @GetMapping("/{idConcesionario}/vendedores")
-    public ResponseEntity<List<VendedorDTO>> getVendedoresByConcesionario(@PathVariable String idConcesionario) {
-        return ResponseEntity.ok(concesionarioService.findVendedoresByConcesionario(idConcesionario));
+    @GetMapping("/ruc/{ruc}/vendedores")
+    public ResponseEntity<List<VendedorDTO>> getVendedoresByRuc(@PathVariable String ruc) {
+        return ResponseEntity.ok(concesionarioService.findVendedoresByRuc(ruc));
     }
 
-    @GetMapping("/{idConcesionario}/vehiculos")
-    public ResponseEntity<List<VehiculoDTO>> getVehiculosByConcesionario(@PathVariable String idConcesionario) {
-        return ResponseEntity.ok(concesionarioService.findVehiculosByConcesionario(idConcesionario));
+    @GetMapping("/ruc/{ruc}/vehiculos")
+    public ResponseEntity<List<VehiculoDTO>> getVehiculosByRuc(@PathVariable String ruc) {
+        return ResponseEntity.ok(concesionarioService.findVehiculosByRuc(ruc));
+    }
+
+    @PostMapping("/ruc/{ruc}/vendedores")
+    public ResponseEntity<VendedorDTO> createVendedor(@PathVariable String ruc, @Valid @RequestBody VendedorDTO dto) {
+        return ResponseEntity.ok(concesionarioService.createVendedorInConcesionario(ruc, dto));
+    }
+
+    @PutMapping("/ruc/{ruc}/vendedores/{idVendedor}")
+    public ResponseEntity<VendedorDTO> updateVendedor(@PathVariable String ruc, @PathVariable String idVendedor, @Valid @RequestBody VendedorDTO dto) {
+        return ResponseEntity.ok(concesionarioService.updateVendedorInConcesionario(ruc, idVendedor, dto));
+    }
+
+    @PutMapping("/ruc/{ruc}/vendedores/{idVendedor}/desactivar")
+    public ResponseEntity<VendedorDTO> desactivarVendedor(@PathVariable String ruc, @PathVariable String idVendedor) {
+        return ResponseEntity.ok(concesionarioService.desactivarVendedorInConcesionario(ruc, idVendedor));
+    }
+
+    @PostMapping("/ruc/{ruc}/vehiculos")
+    public ResponseEntity<VehiculoDTO> createVehiculo(@PathVariable String ruc, @Valid @RequestBody VehiculoDTO dto) {
+        return ResponseEntity.ok(concesionarioService.createVehiculoInConcesionario(ruc, dto));
+    }
+
+    @PutMapping("/ruc/{ruc}/vehiculos/{idVehiculo}")
+    public ResponseEntity<VehiculoDTO> updateVehiculo(@PathVariable String ruc, @PathVariable String idVehiculo, @Valid @RequestBody VehiculoDTO dto) {
+        return ResponseEntity.ok(concesionarioService.updateVehiculoInConcesionario(ruc, idVehiculo, dto));
+    }
+
+    @PutMapping("/ruc/{ruc}/vehiculos/{idVehiculo}/desactivar")
+    public ResponseEntity<VehiculoDTO> desactivarVehiculo(@PathVariable String ruc, @PathVariable String idVehiculo) {
+        return ResponseEntity.ok(concesionarioService.desactivarVehiculoInConcesionario(ruc, idVehiculo));
+    }
+
+    @GetMapping("/ruc/{ruc}/vehiculos/placa/{placa}")
+    public ResponseEntity<VehiculoDTO> getVehiculoByPlaca(@PathVariable String ruc, @PathVariable String placa) {
+        return ResponseEntity.ok(concesionarioService.findVehiculoByPlacaInConcesionario(ruc, placa));
     }
 } 

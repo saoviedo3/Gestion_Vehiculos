@@ -1,7 +1,6 @@
 package com.banquito.gestion_vehiculos.mapper;
 
 import com.banquito.gestion_vehiculos.dto.VehiculoDTO;
-import com.banquito.gestion_vehiculos.model.IdentificadorVehiculo;
 import com.banquito.gestion_vehiculos.model.Vehiculo;
 
 import java.util.List;
@@ -26,8 +25,13 @@ public class VehiculoMapper {
         dto.setTipo(model.getTipo());
         dto.setCombustible(model.getCombustible());
         dto.setVersion(model.getVersion());
-        if (model.getIdentificadorVehiculo() != null)
-            dto.setIdentificadorVehiculo(new IdentificadorVehiculoMapper().toDTO(model.getIdentificadorVehiculo()));
+        if (model.getIdentificadorVehiculo() != null) {
+            VehiculoDTO.Identificador idDto = new VehiculoDTO.Identificador();
+            idDto.setPlaca(model.getIdentificadorVehiculo().getPlaca());
+            idDto.setChasis(model.getIdentificadorVehiculo().getChasis());
+            idDto.setMotor(model.getIdentificadorVehiculo().getMotor());
+            dto.setIdentificadorVehiculo(idDto);
+        }
         return dto;
     }
 
@@ -45,8 +49,13 @@ public class VehiculoMapper {
         model.setTipo(dto.getTipo());
         model.setCombustible(dto.getCombustible());
         model.setVersion(dto.getVersion());
-        if (dto.getIdentificadorVehiculo() != null)
-            model.setIdentificadorVehiculo(new IdentificadorVehiculoMapper().toModel(dto.getIdentificadorVehiculo()));
+        if (dto.getIdentificadorVehiculo() != null) {
+            Vehiculo.Identificador idModel = new Vehiculo.Identificador();
+            idModel.setPlaca(dto.getIdentificadorVehiculo().getPlaca());
+            idModel.setChasis(dto.getIdentificadorVehiculo().getChasis());
+            idModel.setMotor(dto.getIdentificadorVehiculo().getMotor());
+            model.setIdentificadorVehiculo(idModel);
+        }
         return model;
     }
 
@@ -54,7 +63,7 @@ public class VehiculoMapper {
         return entityList.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public void updateEntity(Vehiculo entity, VehiculoDTO dto, IdentificadorVehiculo identificador) {
+    public void updateEntity(Vehiculo entity, VehiculoDTO dto) {
         entity.setMarca(dto.getMarca());
         entity.setModelo(dto.getModelo());
         entity.setAnio(dto.getAnio());
@@ -65,6 +74,12 @@ public class VehiculoMapper {
         entity.setTipo(dto.getTipo());
         entity.setCombustible(dto.getCombustible());
         entity.setVersion(dto.getVersion());
-        if (identificador != null) entity.setIdentificadorVehiculo(identificador);
+        if (dto.getIdentificadorVehiculo() != null) {
+            Vehiculo.Identificador idModel = new Vehiculo.Identificador();
+            idModel.setPlaca(dto.getIdentificadorVehiculo().getPlaca());
+            idModel.setChasis(dto.getIdentificadorVehiculo().getChasis());
+            idModel.setMotor(dto.getIdentificadorVehiculo().getMotor());
+            entity.setIdentificadorVehiculo(idModel);
+        }
     }
 }

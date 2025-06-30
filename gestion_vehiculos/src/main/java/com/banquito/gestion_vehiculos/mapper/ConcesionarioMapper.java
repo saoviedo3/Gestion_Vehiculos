@@ -20,6 +20,7 @@ public class ConcesionarioMapper {
         dto.setEmailContacto(model.getEmailContacto());
         dto.setEstado(model.getEstado());
         dto.setVersion(model.getVersion());
+        dto.setRuc(model.getRuc());
 
         return dto;
     }
@@ -37,6 +38,7 @@ public class ConcesionarioMapper {
         model.setEmailContacto(dto.getEmailContacto());
         model.setEstado(dto.getEstado());
         model.setVersion(dto.getVersion());
+        model.setRuc(dto.getRuc());
 
         return model;
     }

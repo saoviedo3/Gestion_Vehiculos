@@ -42,4 +42,9 @@ public class ConcesionarioDTO {
 
     @Schema(description = "Versión para control de concurrencia", example = "1")
     private Long version;
+
+    @NotBlank(message = "El RUC es requerido")
+    @Size(max = 20, message = "El RUC no puede exceder 20 caracteres")
+    @Schema(description = "RUC del concesionario", example = "1234567890001", maxLength = 20)
+    private String ruc;
 }
