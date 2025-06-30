@@ -1,0 +1,22 @@
+package com.banquito.gestion_vehiculos.repository;
+
+import com.banquito.gestion_vehiculos.model.Concesionario;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface ConcesionarioRepository extends MongoRepository<Concesionario, String> {
+
+    List<Concesionario> findByEstado(String estado);
+
+    Optional<Concesionario> findByEmailContacto(String emailContacto);
+
+    boolean existsByEmailContacto(String emailContacto);
+
+    Optional<Concesionario> findByTelefono(String telefono);
+
+    boolean existsByTelefono(String telefono);
+
+    List<Concesionario> findByRazonSocialContainingIgnoreCase(String razonSocial);
+}
