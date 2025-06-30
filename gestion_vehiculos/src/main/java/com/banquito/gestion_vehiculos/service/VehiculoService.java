@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.banquito.gestion_vehiculos.dto.IdentificadorVehiculoDTO;
 import com.banquito.gestion_vehiculos.dto.VehiculoDTO;
+import com.banquito.gestion_vehiculos.enums.EstadoVehiculoEnum;
 import com.banquito.gestion_vehiculos.mapper.IdentificadorVehiculoMapper;
 import com.banquito.gestion_vehiculos.mapper.VehiculoMapper;
 import com.banquito.gestion_vehiculos.exception.CreateEntityException;
@@ -121,7 +122,7 @@ public class VehiculoService {
         }
     }
 
-    public List<VehiculoDTO> findVehiculosByEstado(String estado) {
+    public List<VehiculoDTO> findVehiculosByEstado(EstadoVehiculoEnum estado) {
         try {
             List<Vehiculo> vehiculos = vehiculoRepository.findByEstado(estado);
             return vehiculoMapper.toDTOList(vehiculos);

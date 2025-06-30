@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.banquito.gestion_vehiculos.enums.EstadoConcesionarioEnum;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +27,7 @@ public class Concesionario {
     private String telefono;
     private String cuenta_bancaria;
     private String email_contacto;
-    private String estado;
+    private EstadoConcesionarioEnum estado;
     private List<Vendedor> vendedores;
     private List<Vehiculo> vehiculos;
     private Long version;

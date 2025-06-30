@@ -2,6 +2,10 @@ package com.banquito.gestion_vehiculos.dto;
 
 import java.math.BigDecimal;
 
+import com.banquito.gestion_vehiculos.enums.CombustibleVehiculoEnum;
+import com.banquito.gestion_vehiculos.enums.EstadoVehiculoEnum;
+import com.banquito.gestion_vehiculos.enums.TipoVehiculoEnum;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -47,8 +51,16 @@ public class VehiculoDTO {
     private String extras;
 
     @NotNull(message = "El estado es requerido")
-    @Schema(description = "Estado del vehículo", example = "NUEVO")
-    private String estado;
+    @Schema(description = "Estado del vehículo", example = "DISPONIBLE, VENDIDO, NO_DISPONIBLE")
+    private EstadoVehiculoEnum estado;
+
+    @NotNull(message = "El tipo es requerido")
+    @Schema(description = "Tipo de vehículo", example = "SEDAN, SUV, CAMIONETA, AUTOMOVIL")
+    private TipoVehiculoEnum tipo;
+
+    @NotNull(message = "El combustible es requerido")
+    @Schema(description = "Tipo de combustible", example = "GASOLINA, DIESEL, ELECTRICO, HIBRIDO")
+    private CombustibleVehiculoEnum combustible;
 
     @Schema(description = "Versión para control de concurrencia", example = "1")
     private Long version;

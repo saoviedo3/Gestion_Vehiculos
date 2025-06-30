@@ -1,5 +1,6 @@
 package com.banquito.gestion_vehiculos.repository;
 
+import com.banquito.gestion_vehiculos.enums.EstadoVehiculoEnum;
 import com.banquito.gestion_vehiculos.model.Vehiculo;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -24,7 +25,7 @@ public interface VehiculoRepository extends MongoRepository<Vehiculo, String> {
 
     List<Vehiculo> findByIdConcesionario(String idConcesionario);
 
-    List<Vehiculo> findByEstado(String estado);
+    List<Vehiculo> findByEstado(EstadoVehiculoEnum estado);
 
     Optional<Vehiculo> findByIdIdentificadorVehiculo(String idIdentificadorVehiculo);
 

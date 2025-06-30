@@ -23,6 +23,8 @@ public class VehiculoMapper {
         dto.setColor(model.getColor());
         dto.setExtras(model.getExtras());
         dto.setEstado(model.getEstado());
+        dto.setTipo(model.getTipo());
+        dto.setCombustible(model.getCombustible());
         dto.setVersion(model.getVersion());
         if (model.getIdentificadorVehiculo() != null)
             dto.setIdentificadorVehiculo(new IdentificadorVehiculoMapper().toDTO(model.getIdentificadorVehiculo()));
@@ -40,6 +42,8 @@ public class VehiculoMapper {
         model.setColor(dto.getColor());
         model.setExtras(dto.getExtras());
         model.setEstado(dto.getEstado());
+        model.setTipo(dto.getTipo());
+        model.setCombustible(dto.getCombustible());
         model.setVersion(dto.getVersion());
         if (dto.getIdentificadorVehiculo() != null)
             model.setIdentificadorVehiculo(new IdentificadorVehiculoMapper().toModel(dto.getIdentificadorVehiculo()));
@@ -58,6 +62,8 @@ public class VehiculoMapper {
         entity.setColor(dto.getColor());
         entity.setExtras(dto.getExtras());
         entity.setEstado(dto.getEstado());
+        entity.setTipo(dto.getTipo());
+        entity.setCombustible(dto.getCombustible());
         entity.setVersion(dto.getVersion());
         if (identificador != null) entity.setIdentificadorVehiculo(identificador);
     }

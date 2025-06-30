@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.banquito.gestion_vehiculos.enums.CombustibleVehiculoEnum;
+import com.banquito.gestion_vehiculos.enums.EstadoVehiculoEnum;
+import com.banquito.gestion_vehiculos.enums.TipoVehiculoEnum;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +30,9 @@ public class Vehiculo {
     private BigDecimal valor;
     private String color;
     private String extras;
-    private String estado;
-    private String tipo;
-    private String combustible;
+    private EstadoVehiculoEnum estado;
+    private TipoVehiculoEnum tipo;
+    private CombustibleVehiculoEnum combustible;
     private IdentificadorVehiculo identificadorVehiculo;
     private Long version;
 

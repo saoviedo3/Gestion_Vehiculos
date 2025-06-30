@@ -3,6 +3,8 @@ package com.banquito.gestion_vehiculos.model;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.banquito.gestion_vehiculos.enums.EstadoVendedorEnum;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +24,7 @@ public class Vendedor {
     private String telefono;
     @Indexed(name = "idxuVendedor_email", unique = true)
     private String email;
-    private String estado;
+    private EstadoVendedorEnum estado;
     private Long version;
 
 }

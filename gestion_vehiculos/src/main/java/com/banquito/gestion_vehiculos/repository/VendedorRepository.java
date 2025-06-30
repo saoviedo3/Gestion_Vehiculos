@@ -1,5 +1,6 @@
 package com.banquito.gestion_vehiculos.repository;
 
+import com.banquito.gestion_vehiculos.enums.EstadoVendedorEnum;
 import com.banquito.gestion_vehiculos.model.Vendedor;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -10,7 +11,7 @@ public interface VendedorRepository extends MongoRepository<Vendedor, String> {
 
     List<Vendedor> findByIdConcesionario(String idConcesionario);
 
-    List<Vendedor> findByEstado(String estado);
+    List<Vendedor> findByEstado(EstadoVendedorEnum estado);
 
     Optional<Vendedor> findByEmail(String email);
 
@@ -20,5 +21,5 @@ public interface VendedorRepository extends MongoRepository<Vendedor, String> {
 
     boolean existsByTelefono(String telefono);
 
-    List<Vendedor> findByIdConcesionarioAndEstado(String idConcesionario, String estado);
+    List<Vendedor> findByIdConcesionarioAndEstado(String idConcesionario, EstadoVendedorEnum estado);
 }

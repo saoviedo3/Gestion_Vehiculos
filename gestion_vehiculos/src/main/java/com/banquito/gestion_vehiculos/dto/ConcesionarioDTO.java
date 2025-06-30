@@ -1,5 +1,7 @@
 package com.banquito.gestion_vehiculos.dto;
 
+import com.banquito.gestion_vehiculos.enums.EstadoConcesionarioEnum;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -36,7 +38,7 @@ public class ConcesionarioDTO {
 
     @NotNull(message = "El estado es requerido")
     @Schema(description = "Estado del concesionario", example = "ACTIVO")
-    private String estado;
+    private EstadoConcesionarioEnum estado;
 
     @Schema(description = "Versión para control de concurrencia", example = "1")
     private Long version;

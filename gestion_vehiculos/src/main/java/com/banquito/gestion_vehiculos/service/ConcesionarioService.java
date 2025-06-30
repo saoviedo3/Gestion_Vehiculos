@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.banquito.gestion_vehiculos.dto.ConcesionarioDTO;
 import com.banquito.gestion_vehiculos.dto.VendedorDTO;
+import com.banquito.gestion_vehiculos.enums.EstadoConcesionarioEnum;
+import com.banquito.gestion_vehiculos.enums.EstadoVendedorEnum;
 import com.banquito.gestion_vehiculos.mapper.ConcesionarioMapper;
 import com.banquito.gestion_vehiculos.mapper.VendedorMapper;
 import com.banquito.gestion_vehiculos.exception.CreateEntityException;
@@ -48,7 +50,7 @@ public class ConcesionarioService {
         }
     }
 
-    public List<ConcesionarioDTO> findConcesionariosByEstado(String estado) {
+    public List<ConcesionarioDTO> findConcesionariosByEstado(EstadoConcesionarioEnum estado) {
         try {
             List<Concesionario> lista = concesionarioRepository.findByEstado(estado);
             return lista.stream().map(concesionarioMapper::toDTO).toList();
@@ -82,7 +84,7 @@ public class ConcesionarioService {
         try {
             Concesionario concesionario = concesionarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con id=" + id));
-            concesionario.setEstado("INACTIVO");
+            concesionario.setEstado(EstadoConcesionarioEnum.INACTIVO);
             Concesionario actualizado = concesionarioRepository.save(concesionario);
             return concesionarioMapper.toDTO(actualizado);
         } catch (ResourceNotFoundException e) {
@@ -174,7 +176,7 @@ public class ConcesionarioService {
         }
     }
 
-    public List<VendedorDTO> findVendedoresByEstado(String estado) {
+    public List<VendedorDTO> findVendedoresByEstado(EstadoVendedorEnum estado) {
         try {
             List<Vendedor> lista = vendedorRepository.findByEstado(estado);
             return lista.stream().map(vendedorMapper::toDTO).toList();
@@ -187,7 +189,7 @@ public class ConcesionarioService {
         try {
             Vendedor vendedor = vendedorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Vendedor no encontrado con id=" + id));
-            vendedor.setEstado("INACTIVO");
+            vendedor.setEstado(EstadoVendedorEnum.INACTIVO);
             Vendedor actualizado = vendedorRepository.save(vendedor);
             return vendedorMapper.toDTO(actualizado);
         } catch (ResourceNotFoundException e) {

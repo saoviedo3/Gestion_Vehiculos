@@ -1,5 +1,7 @@
 package com.banquito.gestion_vehiculos.dto;
 
+import com.banquito.gestion_vehiculos.enums.EstadoVendedorEnum;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -31,7 +33,7 @@ public class VendedorDTO {
 
     @NotNull(message = "El estado es requerido")
     @Schema(description = "Estado del vendedor", example = "ACTIVO")
-    private String estado;
+    private EstadoVendedorEnum estado;
 
     @Schema(description = "Versión para control de concurrencia", example = "1")
     private Long version;
