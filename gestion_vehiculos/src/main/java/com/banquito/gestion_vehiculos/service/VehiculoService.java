@@ -3,6 +3,8 @@ package com.banquito.gestion_vehiculos.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.banquito.gestion_vehiculos.dto.IdentificadorVehiculoDTO;
 import com.banquito.gestion_vehiculos.dto.VehiculoDTO;
 import com.banquito.gestion_vehiculos.enums.EstadoVehiculoEnum;
@@ -55,6 +57,7 @@ public class VehiculoService {
         }
     }
 
+    @Transactional
     public IdentificadorVehiculoDTO createIdentificador(IdentificadorVehiculoDTO dto) {
         try {
             if (identificadorRepository.existsByVin(dto.getVin()))
@@ -146,6 +149,7 @@ public class VehiculoService {
         }
     }
 
+    @Transactional
     public VehiculoDTO createVehiculo(VehiculoDTO dto) {
         try {
             // Verificación de identificador de vehículo
@@ -166,6 +170,7 @@ public class VehiculoService {
         }
     }
 
+    @Transactional
     public VehiculoDTO updateVehiculo(String id, VehiculoDTO dto) {
         try {
             Vehiculo vehiculo = vehiculoRepository.findById(id)

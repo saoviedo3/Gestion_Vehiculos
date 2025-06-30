@@ -3,6 +3,8 @@ package com.banquito.gestion_vehiculos.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.banquito.gestion_vehiculos.dto.ConcesionarioDTO;
 import com.banquito.gestion_vehiculos.dto.VendedorDTO;
 import com.banquito.gestion_vehiculos.enums.EstadoConcesionarioEnum;
@@ -80,6 +82,7 @@ public class ConcesionarioService {
         }
     }
 
+    @Transactional
     public ConcesionarioDTO desactivateConcesionario(String id) {
         try {
             Concesionario concesionario = concesionarioRepository.findById(id)
@@ -94,6 +97,7 @@ public class ConcesionarioService {
         }
     }
 
+    @Transactional
     public ConcesionarioDTO createConcesionario(ConcesionarioDTO dto) {
         try {
             if (concesionarioRepository.existsByEmailContacto(dto.getEmailContacto())) {
@@ -114,6 +118,7 @@ public class ConcesionarioService {
         }
     }
 
+    @Transactional
     public ConcesionarioDTO updateConcesionario(String id, ConcesionarioDTO dto) {
         try {
             Concesionario concesionario = concesionarioRepository.findById(id)
@@ -185,6 +190,7 @@ public class ConcesionarioService {
         }
     }
 
+    @Transactional
     public VendedorDTO desactivateVendedor(String id) {
         try {
             Vendedor vendedor = vendedorRepository.findById(id)
@@ -199,6 +205,7 @@ public class ConcesionarioService {
         }
     }
 
+    @Transactional
     public VendedorDTO createVendedor(VendedorDTO dto) {
         try {
             if (vendedorRepository.existsByEmail(dto.getEmail())) {
@@ -219,6 +226,7 @@ public class ConcesionarioService {
         }
     }
 
+    @Transactional
     public VendedorDTO updateVendedor(String id, VendedorDTO dto) {
         try {
             Vendedor vendedor = vendedorRepository.findById(id)
