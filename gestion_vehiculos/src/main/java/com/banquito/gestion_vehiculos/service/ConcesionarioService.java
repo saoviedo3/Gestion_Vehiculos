@@ -230,7 +230,7 @@ public class ConcesionarioService {
         List<Vehiculo> vehiculos = concesionario.getVehiculos();
         if (vehiculos == null) throw new ResourceNotFoundException("No hay vehículos en el concesionario");
         Vehiculo vehiculo = vehiculos.stream()
-            .filter(v -> v.getIdentificadorVehiculo() != null && placa.equalsIgnoreCase(v.getIdentificadorVehiculo().getPlaca()))
+            .filter(v -> v.getIdentificadorVehiculo() != null && v.getIdentificadorVehiculo().getPlaca().equalsIgnoreCase(placa))
             .findFirst()
             .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con placa=" + placa));
         return vehiculoMapper.toDTO(vehiculo);
@@ -285,6 +285,129 @@ public class ConcesionarioService {
         vendedor.setVersion(vendedor.getVersion() == null ? 1L : vendedor.getVersion() + 1);
         concesionarioRepository.save(concesionario);
         return vendedorMapper.toDTO(vendedor);
+    }
+
+    @Transactional
+    public VendedorDTO updateVendedorInConcesionarioByCedula(String ruc, String cedula, VendedorDTO dto) {
+        Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+            .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        List<Vendedor> vendedores = concesionario.getVendedores();
+        if (vendedores == null) throw new ResourceNotFoundException("No hay vendedores en el concesionario");
+        Vendedor vendedor = vendedores.stream().filter(v -> v.getCedula().equals(cedula)).findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException("Vendedor no encontrado con cédula=" + cedula));
+        vendedor.setNombre(dto.getNombre());
+        vendedor.setTelefono(dto.getTelefono());
+        vendedor.setEmail(dto.getEmail());
+        vendedor.setEstado(dto.getEstado());
+        vendedor.setVersion(vendedor.getVersion() == null ? 1L : vendedor.getVersion() + 1);
+        concesionarioRepository.save(concesionario);
+        return vendedorMapper.toDTO(vendedor);
+    }
+
+    @Transactional
+    public VendedorDTO desactivarVendedorInConcesionarioByCedula(String ruc, String cedula) {
+        Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+            .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        List<Vendedor> vendedores = concesionario.getVendedores();
+        if (vendedores == null) throw new ResourceNotFoundException("No hay vendedores en el concesionario");
+        Vendedor vendedor = vendedores.stream().filter(v -> v.getCedula().equals(cedula)).findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException("Vendedor no encontrado con cédula=" + cedula));
+        vendedor.setEstado(com.banquito.gestion_vehiculos.enums.EstadoVendedorEnum.INACTIVO);
+        vendedor.setVersion(vendedor.getVersion() == null ? 1L : vendedor.getVersion() + 1);
+        concesionarioRepository.save(concesionario);
+        return vendedorMapper.toDTO(vendedor);
+    }
+
+    public VendedorDTO findVendedorByCedulaInConcesionario(String ruc, String cedula) {
+        Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+            .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        List<Vendedor> vendedores = concesionario.getVendedores();
+        if (vendedores == null) throw new ResourceNotFoundException("No hay vendedores en el concesionario");
+        Vendedor vendedor = vendedores.stream().filter(v -> v.getCedula().equals(cedula)).findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException("Vendedor no encontrado con cédula=" + cedula));
+        return vendedorMapper.toDTO(vendedor);
+    }
+
+    public List<VendedorDTO> findVendedoresByEstadoInConcesionario(String ruc, String estado) {
+        Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+            .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        List<Vendedor> vendedores = concesionario.getVendedores();
+        if (vendedores == null) return List.of();
+        return vendedores.stream()
+            .filter(v -> v.getEstado() != null && v.getEstado().name().equalsIgnoreCase(estado))
+            .map(vendedorMapper::toDTO)
+            .toList();
+    }
+
+    public VendedorDTO findVendedorByEmailInConcesionario(String ruc, String email) {
+        Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+            .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        List<Vendedor> vendedores = concesionario.getVendedores();
+        if (vendedores == null) throw new ResourceNotFoundException("No hay vendedores en el concesionario");
+        Vendedor vendedor = vendedores.stream().filter(v -> v.getEmail().equalsIgnoreCase(email)).findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException("Vendedor no encontrado con email=" + email));
+        return vendedorMapper.toDTO(vendedor);
+    }
+
+    @Transactional
+    public VehiculoDTO updateVehiculoInConcesionarioByPlaca(String ruc, String placa, VehiculoDTO dto) {
+        Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+            .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        List<Vehiculo> vehiculos = concesionario.getVehiculos();
+        if (vehiculos == null) throw new ResourceNotFoundException("No hay vehículos en el concesionario");
+        Vehiculo vehiculo = vehiculos.stream().filter(v -> v.getIdentificadorVehiculo() != null && v.getIdentificadorVehiculo().getPlaca().equalsIgnoreCase(placa)).findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con placa=" + placa));
+        vehiculo.setMarca(dto.getMarca());
+        vehiculo.setModelo(dto.getModelo());
+        vehiculo.setCilindraje(dto.getCilindraje());
+        vehiculo.setAnio(dto.getAnio());
+        vehiculo.setValor(dto.getValor());
+        vehiculo.setColor(dto.getColor());
+        vehiculo.setExtras(dto.getExtras());
+        vehiculo.setEstado(dto.getEstado());
+        vehiculo.setTipo(dto.getTipo());
+        vehiculo.setCombustible(dto.getCombustible());
+        vehiculo.setCondicion(dto.getCondicion());
+        vehiculo.setIdentificadorVehiculo(vehiculoMapper.toModel(dto).getIdentificadorVehiculo());
+        vehiculo.setVersion(vehiculo.getVersion() == null ? 1L : vehiculo.getVersion() + 1);
+        concesionarioRepository.save(concesionario);
+        return vehiculoMapper.toDTO(vehiculo);
+    }
+
+    @Transactional
+    public VehiculoDTO desactivarVehiculoInConcesionarioByPlaca(String ruc, String placa) {
+        Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+            .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        List<Vehiculo> vehiculos = concesionario.getVehiculos();
+        if (vehiculos == null) throw new ResourceNotFoundException("No hay vehículos en el concesionario");
+        Vehiculo vehiculo = vehiculos.stream().filter(v -> v.getIdentificadorVehiculo() != null && v.getIdentificadorVehiculo().getPlaca().equalsIgnoreCase(placa)).findFirst()
+            .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con placa=" + placa));
+        vehiculo.setEstado(com.banquito.gestion_vehiculos.enums.EstadoVehiculoEnum.NO_DISPONIBLE);
+        vehiculo.setVersion(vehiculo.getVersion() == null ? 1L : vehiculo.getVersion() + 1);
+        concesionarioRepository.save(concesionario);
+        return vehiculoMapper.toDTO(vehiculo);
+    }
+
+    public List<VehiculoDTO> findVehiculosByEstadoInConcesionario(String ruc, String estado) {
+        Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+            .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        List<Vehiculo> vehiculos = concesionario.getVehiculos();
+        if (vehiculos == null) return List.of();
+        return vehiculos.stream()
+            .filter(v -> v.getEstado() != null && v.getEstado().name().equalsIgnoreCase(estado))
+            .map(vehiculoMapper::toDTO)
+            .toList();
+    }
+
+    public List<VehiculoDTO> findVehiculosByCondicionInConcesionario(String ruc, String condicion) {
+        Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+            .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        List<Vehiculo> vehiculos = concesionario.getVehiculos();
+        if (vehiculos == null) return List.of();
+        return vehiculos.stream()
+            .filter(v -> v.getCondicion() != null && v.getCondicion().name().equalsIgnoreCase(condicion))
+            .map(vehiculoMapper::toDTO)
+            .toList();
     }
 }
 

@@ -26,5 +26,6 @@ public class Vendedor {
     private String email;
     private EstadoVendedorEnum estado;
     private Long version;
+    private String cedula;
 
 }

@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import com.banquito.gestion_vehiculos.enums.EstadoVehiculoEnum;
 import com.banquito.gestion_vehiculos.enums.TipoVehiculoEnum;
 import com.banquito.gestion_vehiculos.enums.CombustibleVehiculoEnum;
+import com.banquito.gestion_vehiculos.enums.CondicionVehiculoEnum;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
@@ -28,6 +29,10 @@ public class VehiculoDTO {
     @Size(max = 40, message = "El modelo no puede exceder 40 caracteres")
     @Schema(description = "Modelo del vehículo", example = "Corolla", maxLength = 40)
     private String modelo;
+
+    @NotNull(message = "El cilindraje es requerido")
+    @Schema(description = "Cilindraje del vehículo", example = "1.8")
+    private double cilindraje;
 
     @NotNull(message = "El año es requerido")
     @Min(value = 1900, message = "El año debe ser mayor a 1900")
@@ -62,23 +67,12 @@ public class VehiculoDTO {
     @Schema(description = "Tipo de combustible", example = "GASOLINA, DIESEL, ELECTRICO, HIBRIDO")
     private CombustibleVehiculoEnum combustible;
 
+    @NotNull(message = "La condición es requerida")
+    @Schema(description = "Condición del vehículo", example = "NUEVO, USADO")
+    private CondicionVehiculoEnum condicion;
+
     @Schema(description = "Versión para control de concurrencia", example = "1")
     private Long version;
 
-    private Identificador identificadorVehiculo;
-
-    public static class Identificador {
-        private String placa;
-        private String chasis;
-        private String motor;
-        public String getPlaca() { return placa; }
-        public void setPlaca(String placa) { this.placa = placa; }
-        public String getChasis() { return chasis; }
-        public void setChasis(String chasis) { this.chasis = chasis; }
-        public String getMotor() { return motor; }
-        public void setMotor(String motor) { this.motor = motor; }
-    }
-
-    public Identificador getIdentificadorVehiculo() { return identificadorVehiculo; }
-    public void setIdentificadorVehiculo(Identificador identificadorVehiculo) { this.identificadorVehiculo = identificadorVehiculo; }
+    private IdentificadorVehiculoDTO identificadorVehiculo;
 }

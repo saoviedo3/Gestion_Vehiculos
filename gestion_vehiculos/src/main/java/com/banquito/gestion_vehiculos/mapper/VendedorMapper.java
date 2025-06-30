@@ -19,6 +19,7 @@ public class VendedorMapper {
         dto.setEmail(model.getEmail());
         dto.setEstado(model.getEstado());
         dto.setVersion(model.getVersion());
+        dto.setCedula(model.getCedula());
 
         return dto;
     }
@@ -35,6 +36,7 @@ public class VendedorMapper {
         model.setEmail(dto.getEmail());
         model.setEstado(dto.getEstado());
         model.setVersion(dto.getVersion());
+        model.setCedula(dto.getCedula());
 
         return model;
     }

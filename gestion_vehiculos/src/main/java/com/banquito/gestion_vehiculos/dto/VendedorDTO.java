@@ -1,6 +1,7 @@
 package com.banquito.gestion_vehiculos.dto;
 
 import com.banquito.gestion_vehiculos.enums.EstadoVendedorEnum;
+import com.banquito.gestion_vehiculos.validation.CedulaEcuatoriana;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
@@ -37,4 +38,10 @@ public class VendedorDTO {
 
     @Schema(description = "Versión para control de concurrencia", example = "1")
     private Long version;
+
+    @CedulaEcuatoriana
+    @NotBlank(message = "La cédula es requerida")
+    @Size(max = 20, message = "La cédula no puede exceder 20 caracteres")
+    @Schema(description = "Cédula del vendedor", example = "0102030405", maxLength = 20)
+    private String cedula;
 }
