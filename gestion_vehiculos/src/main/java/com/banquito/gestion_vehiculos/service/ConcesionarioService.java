@@ -7,17 +7,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.banquito.gestion_vehiculos.dto.ConcesionarioDTO;
 import com.banquito.gestion_vehiculos.dto.VendedorDTO;
+import com.banquito.gestion_vehiculos.dto.VehiculoDTO;
 import com.banquito.gestion_vehiculos.enums.EstadoConcesionarioEnum;
 import com.banquito.gestion_vehiculos.enums.EstadoVendedorEnum;
 import com.banquito.gestion_vehiculos.mapper.ConcesionarioMapper;
 import com.banquito.gestion_vehiculos.mapper.VendedorMapper;
+import com.banquito.gestion_vehiculos.mapper.VehiculoMapper;
 import com.banquito.gestion_vehiculos.exception.CreateEntityException;
 import com.banquito.gestion_vehiculos.exception.ResourceNotFoundException;
 import com.banquito.gestion_vehiculos.exception.UpdateEntityException;
 import com.banquito.gestion_vehiculos.model.Concesionario;
 import com.banquito.gestion_vehiculos.model.Vendedor;
+import com.banquito.gestion_vehiculos.model.Vehiculo;
 import com.banquito.gestion_vehiculos.repository.ConcesionarioRepository;
 import com.banquito.gestion_vehiculos.repository.VendedorRepository;
+import com.banquito.gestion_vehiculos.repository.VehiculoRepository;
 
 @Service
 public class ConcesionarioService {
@@ -26,29 +30,35 @@ public class ConcesionarioService {
     private final ConcesionarioMapper concesionarioMapper;
     private final VendedorRepository vendedorRepository;
     private final VendedorMapper vendedorMapper;
+    private final VehiculoRepository vehiculoRepository;
+    private final VehiculoMapper vehiculoMapper;
 
     public ConcesionarioService(
             ConcesionarioRepository concesionarioRepository,
             ConcesionarioMapper concesionarioMapper,
             VendedorRepository vendedorRepository,
-            VendedorMapper vendedorMapper) {
+            VendedorMapper vendedorMapper,
+            VehiculoRepository vehiculoRepository,
+            VehiculoMapper vehiculoMapper) {
         this.concesionarioRepository = concesionarioRepository;
         this.concesionarioMapper = concesionarioMapper;
         this.vendedorRepository = vendedorRepository;
         this.vendedorMapper = vendedorMapper;
+        this.vehiculoRepository = vehiculoRepository;
+        this.vehiculoMapper = vehiculoMapper;
     }
 
     // --------- Métodos para Concesionario ---------
 
-    public ConcesionarioDTO findConcesionarioById(String id) {
+    public ConcesionarioDTO findConcesionarioByRuc(String ruc) {
         try {
-            Concesionario concesionario = concesionarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con id=" + id));
+            Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+                    .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
             return concesionarioMapper.toDTO(concesionario);
         } catch (ResourceNotFoundException e) {
             throw e;
         } catch (Exception e) {
-            throw new ResourceNotFoundException("Error al buscar el concesionario: " + id);
+            throw new ResourceNotFoundException("Error al buscar concesionario por RUC: " + ruc);
         }
     }
 
@@ -83,10 +93,10 @@ public class ConcesionarioService {
     }
 
     @Transactional
-    public ConcesionarioDTO desactivateConcesionario(String id) {
+    public ConcesionarioDTO desactivateConcesionario(String ruc) {
         try {
-            Concesionario concesionario = concesionarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con id=" + id));
+            Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+                .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
             concesionario.setEstado(EstadoConcesionarioEnum.INACTIVO);
             Concesionario actualizado = concesionarioRepository.save(concesionario);
             return concesionarioMapper.toDTO(actualizado);
@@ -119,11 +129,11 @@ public class ConcesionarioService {
     }
 
     @Transactional
-    public ConcesionarioDTO updateConcesionario(String id, ConcesionarioDTO dto) {
+    public ConcesionarioDTO updateConcesionario(String ruc, ConcesionarioDTO dto) {
         try {
-            Concesionario concesionario = concesionarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con id=" + id));
-            if (!concesionario.getEmail_contacto().equals(dto.getEmailContacto()) &&
+            Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+                .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+            if (!concesionario.getEmailContacto().equals(dto.getEmailContacto()) &&
                 concesionarioRepository.existsByEmailContacto(dto.getEmailContacto())) {
                 throw new CreateEntityException("Concesionario", "Email ya en uso");
             }
@@ -131,10 +141,10 @@ public class ConcesionarioService {
                 concesionarioRepository.existsByTelefono(dto.getTelefono())) {
                 throw new CreateEntityException("Concesionario", "Teléfono ya en uso");
             }
-            concesionario.setRazon_social(dto.getRazonSocial());
+            concesionario.setRazonSocial(dto.getRazonSocial());
             concesionario.setDireccion(dto.getDireccion());
             concesionario.setTelefono(dto.getTelefono());
-            concesionario.setEmail_contacto(dto.getEmailContacto());
+            concesionario.setEmailContacto(dto.getEmailContacto());
             concesionario.setEstado(dto.getEstado());
             concesionario.setVersion(dto.getVersion());
             Concesionario actualizado = concesionarioRepository.save(concesionario);
@@ -174,7 +184,10 @@ public class ConcesionarioService {
 
     public List<VendedorDTO> findVendedoresByConcesionario(String idConcesionario) {
         try {
-            List<Vendedor> lista = vendedorRepository.findByIdConcesionario(idConcesionario);
+            Concesionario concesionario = concesionarioRepository.findById(idConcesionario)
+                .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con id=" + idConcesionario));
+            List<Vendedor> lista = concesionario.getVendedores();
+            if (lista == null) return List.of();
             return lista.stream().map(vendedorMapper::toDTO).toList();
         } catch (Exception e) {
             throw new ResourceNotFoundException("Error al buscar vendedores del concesionario: " + idConcesionario);
@@ -248,6 +261,18 @@ public class ConcesionarioService {
             throw e;
         } catch (Exception e) {
             throw new UpdateEntityException("Vendedor", "Error al actualizar el vendedor. Detalle: " + e.getMessage());
+        }
+    }
+
+    public List<VehiculoDTO> findVehiculosByConcesionario(String idConcesionario) {
+        try {
+            Concesionario concesionario = concesionarioRepository.findById(idConcesionario)
+                .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con id=" + idConcesionario));
+            List<Vehiculo> lista = concesionario.getVehiculos();
+            if (lista == null) return List.of();
+            return lista.stream().map(vehiculoMapper::toDTO).toList();
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Error al buscar vehículos del concesionario: " + idConcesionario);
         }
     }
 }

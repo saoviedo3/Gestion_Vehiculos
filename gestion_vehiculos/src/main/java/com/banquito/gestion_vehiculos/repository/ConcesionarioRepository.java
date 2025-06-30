@@ -20,4 +20,6 @@ public interface ConcesionarioRepository extends MongoRepository<Concesionario, 
     boolean existsByTelefono(String telefono);
 
     List<Concesionario> findByRazonSocialContainingIgnoreCase(String razonSocial);
+
+    Optional<Concesionario> findByRuc(String ruc);
 }

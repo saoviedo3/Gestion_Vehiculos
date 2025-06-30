@@ -22,11 +22,11 @@ public class Concesionario {
 
     private String id;
     private String ruc;
-    private String razon_social;
+    private String razonSocial;
     private String direccion;
     private String telefono;
-    private String cuenta_bancaria;
-    private String email_contacto;
+    private String cuentaBancaria;
+    private String emailContacto;
     private EstadoConcesionarioEnum estado;
     private List<Vendedor> vendedores;
     private List<Vehiculo> vehiculos;

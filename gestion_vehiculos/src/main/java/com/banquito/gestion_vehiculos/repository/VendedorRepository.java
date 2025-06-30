@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface VendedorRepository extends MongoRepository<Vendedor, String> {
 
-    List<Vendedor> findByIdConcesionario(String idConcesionario);
+    Optional<Vendedor> findById(String id);
 
     List<Vendedor> findByEstado(EstadoVendedorEnum estado);
 
@@ -20,6 +20,4 @@ public interface VendedorRepository extends MongoRepository<Vendedor, String> {
     boolean existsByEmail(String email);
 
     boolean existsByTelefono(String telefono);
-
-    List<Vendedor> findByIdConcesionarioAndEstado(String idConcesionario, EstadoVendedorEnum estado);
 }

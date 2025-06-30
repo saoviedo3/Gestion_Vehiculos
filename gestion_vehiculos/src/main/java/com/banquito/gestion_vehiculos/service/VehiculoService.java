@@ -83,45 +83,17 @@ public class VehiculoService {
 
     // -------- Métodos para Vehiculo --------
 
-    public VehiculoDTO findVehiculoById(String id) {
-        try {
-            Vehiculo vehiculo = vehiculoRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con id=" + id));
-            return vehiculoMapper.toDTO(vehiculo);
-        } catch (ResourceNotFoundException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Error al buscar el vehículo: " + id);
-        }
-    }
-
-    public List<VehiculoDTO> findVehiculosByMarca(String marca) {
-        try {
-            List<Vehiculo> vehiculos = vehiculoRepository.findByMarca(marca);
-            return vehiculoMapper.toDTOList(vehiculos);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Error al buscar vehículos por marca: " + marca);
-        }
-    }
-
-    public List<VehiculoDTO> findVehiculosByModelo(String modelo) {
-        try {
-            List<Vehiculo> vehiculos = vehiculoRepository.findByModelo(modelo);
-            return vehiculoMapper.toDTOList(vehiculos);
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Error al buscar vehículos por modelo: " + modelo);
-        }
-    }
-
     public VehiculoDTO findVehiculoByPlaca(String placa) {
         try {
-            Vehiculo vehiculo = vehiculoRepository.findByPlaca(placa)
-                    .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con placa=" + placa));
+            IdentificadorVehiculo identificador = identificadorRepository.findByPlaca(placa)
+                .orElseThrow(() -> new ResourceNotFoundException("IdentificadorVehiculo no encontrado con placa=" + placa));
+            Vehiculo vehiculo = vehiculoRepository.findByIdentificadorVehiculo_Id(identificador.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con identificador de placa=" + placa));
             return vehiculoMapper.toDTO(vehiculo);
         } catch (ResourceNotFoundException e) {
             throw e;
         } catch (Exception e) {
-            throw new ResourceNotFoundException("Error al buscar vehículos por placa: " + placa);
+            throw new ResourceNotFoundException("Error al buscar vehículo por placa: " + placa);
         }
     }
 
@@ -137,10 +109,8 @@ public class VehiculoService {
     public List<VehiculoDTO> findVehiculosByConcesionario(String idConcesionario) {
         try {
             Concesionario concesionario = concesionarioRepository.findById(idConcesionario)
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Concesionario no encontrado con id=" + idConcesionario));
-            if (concesionario.getVehiculos() == null)
-                return List.of();
+                .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con id=" + idConcesionario));
+            if (concesionario.getVehiculos() == null) return List.of();
             return vehiculoMapper.toDTOList(concesionario.getVehiculos());
         } catch (ResourceNotFoundException e) {
             throw e;
@@ -152,12 +122,9 @@ public class VehiculoService {
     @Transactional
     public VehiculoDTO createVehiculo(VehiculoDTO dto) {
         try {
-            // Verificación de identificador de vehículo
-            String idIdentificador = (dto.getIdentificadorVehiculo() != null) ? dto.getIdentificadorVehiculo().getId()
-                    : null;
+            String idIdentificador = (dto.getIdentificadorVehiculo() != null) ? dto.getIdentificadorVehiculo().getId() : null;
             if (idIdentificador == null || !identificadorRepository.existsById(idIdentificador)) {
-                throw new CreateEntityException("Vehiculo",
-                        "IdentificadorVehiculo no existe con id=" + idIdentificador);
+                throw new CreateEntityException("Vehiculo", "IdentificadorVehiculo no existe con id=" + idIdentificador);
             }
             Vehiculo vehiculo = vehiculoMapper.toModel(dto);
             vehiculo.setId(null);
@@ -171,17 +138,18 @@ public class VehiculoService {
     }
 
     @Transactional
-    public VehiculoDTO updateVehiculo(String id, VehiculoDTO dto) {
+    public VehiculoDTO updateVehiculo(String placa, VehiculoDTO dto) {
         try {
-            Vehiculo vehiculo = vehiculoRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con id=" + id));
-            IdentificadorVehiculo identificador = null;
+            IdentificadorVehiculo identificador = identificadorRepository.findByPlaca(placa)
+                .orElseThrow(() -> new ResourceNotFoundException("IdentificadorVehiculo no encontrado con placa=" + placa));
+            Vehiculo vehiculo = vehiculoRepository.findByIdentificadorVehiculo_Id(identificador.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con identificador de placa=" + placa));
+            IdentificadorVehiculo nuevoIdentificador = null;
             if (dto.getIdentificadorVehiculo() != null && dto.getIdentificadorVehiculo().getId() != null) {
-                identificador = identificadorRepository.findById(dto.getIdentificadorVehiculo().getId())
-                        .orElseThrow(() -> new ResourceNotFoundException("IdentificadorVehiculo no encontrado con id="
-                                + dto.getIdentificadorVehiculo().getId()));
+                nuevoIdentificador = identificadorRepository.findById(dto.getIdentificadorVehiculo().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("IdentificadorVehiculo no encontrado con id=" + dto.getIdentificadorVehiculo().getId()));
             }
-            vehiculoMapper.updateEntity(vehiculo, dto, identificador);
+            vehiculoMapper.updateEntity(vehiculo, dto, nuevoIdentificador);
             Vehiculo vehiculoActualizado = vehiculoRepository.save(vehiculo);
             return vehiculoMapper.toDTO(vehiculoActualizado);
         } catch (ResourceNotFoundException e) {

@@ -15,18 +15,12 @@ public interface VehiculoRepository extends MongoRepository<Vehiculo, String> {
 
     boolean existsByModelo(String modelo);
 
-    boolean existsByPlaca(String placa);
-
-    Optional<Vehiculo> findByPlaca(String placa);
-
     List<Vehiculo> findByMarca(String marca);
 
     List<Vehiculo> findByModelo(String modelo);
 
-    List<Vehiculo> findByIdConcesionario(String idConcesionario);
-
     List<Vehiculo> findByEstado(EstadoVehiculoEnum estado);
 
-    Optional<Vehiculo> findByIdIdentificadorVehiculo(String idIdentificadorVehiculo);
+    Optional<Vehiculo> findByIdentificadorVehiculo_Id(String idIdentificadorVehiculo);
 
 }

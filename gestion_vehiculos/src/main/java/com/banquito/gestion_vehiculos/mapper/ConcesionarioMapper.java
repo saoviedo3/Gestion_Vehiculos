@@ -14,10 +14,10 @@ public class ConcesionarioMapper {
 
         ConcesionarioDTO dto = new ConcesionarioDTO();
         dto.setId(model.getId());
-        dto.setRazonSocial(model.getRazon_social());
+        dto.setRazonSocial(model.getRazonSocial());
         dto.setDireccion(model.getDireccion());
         dto.setTelefono(model.getTelefono());
-        dto.setEmailContacto(model.getEmail_contacto());
+        dto.setEmailContacto(model.getEmailContacto());
         dto.setEstado(model.getEstado());
         dto.setVersion(model.getVersion());
 
@@ -31,10 +31,10 @@ public class ConcesionarioMapper {
 
         Concesionario model = new Concesionario();
         model.setId(dto.getId());
-        model.setRazon_social(dto.getRazonSocial());
+        model.setRazonSocial(dto.getRazonSocial());
         model.setDireccion(dto.getDireccion());
         model.setTelefono(dto.getTelefono());
-        model.setEmail_contacto(dto.getEmailContacto());
+        model.setEmailContacto(dto.getEmailContacto());
         model.setEstado(dto.getEstado());
         model.setVersion(dto.getVersion());
 
