@@ -18,4 +18,3 @@ public class UpdateEntityException extends RuntimeException {
         return errorCode;
     }
 }
-
