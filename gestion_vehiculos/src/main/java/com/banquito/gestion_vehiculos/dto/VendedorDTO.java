@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "DTO para la gestión de vendedores")
 public class VendedorDTO {
 
-    @Schema(description = "Identificador único del vendedor", example = "1")
+    @Schema(description = "ID generado automáticamente", accessMode = Schema.AccessMode.READ_ONLY, example = "6863125741aecf5c57b57ed0")
     private String id;
 
     @NotBlank(message = "El nombre es requerido")
@@ -36,7 +36,7 @@ public class VendedorDTO {
     @Schema(description = "Estado del vendedor", example = "ACTIVO")
     private EstadoVendedorEnum estado;
 
-    @Schema(description = "Versión para control de concurrencia", example = "1")
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long version;
 
     @CedulaEcuatoriana

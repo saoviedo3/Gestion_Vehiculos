@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "DTO para la gestión de concesionarios")
 public class ConcesionarioDTO {
 
-    @Schema(description = "Identificador único del concesionario", example = "1")
+    @Schema(description = "ID generado automáticamente", accessMode = Schema.AccessMode.READ_ONLY, example = "6863125741aecf5c57b57ed0")
     private String id;
 
     @NotBlank(message = "La razón social es requerida")
@@ -40,7 +40,7 @@ public class ConcesionarioDTO {
     @Schema(description = "Estado del concesionario", example = "ACTIVO")
     private EstadoConcesionarioEnum estado;
 
-    @Schema(description = "Versión para control de concurrencia", example = "1")
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long version;
 
     @NotBlank(message = "El RUC es requerido")

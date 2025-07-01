@@ -5,14 +5,22 @@ import com.banquito.gestion_vehiculos.model.Vehiculo;
 import com.banquito.gestion_vehiculos.model.IdentificadorVehiculo;
 import com.banquito.gestion_vehiculos.dto.IdentificadorVehiculoDTO;
 import com.banquito.gestion_vehiculos.mapper.IdentificadorVehiculoMapper;
+import com.banquito.gestion_vehiculos.repository.IdentificadorVehiculoRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VehiculoMapper {
+
+    @Autowired
+    private IdentificadorVehiculoRepository identificadorVehiculoRepository;
+
+    @Autowired
+    private IdentificadorVehiculoMapper identificadorVehiculoMapper;
 
     public VehiculoDTO toDTO(Vehiculo model) {
         if (model == null) return null;
@@ -29,7 +37,14 @@ public class VehiculoMapper {
         dto.setCombustible(model.getCombustible());
         dto.setVersion(model.getVersion());
         dto.setCondicion(model.getCondicion());
-        dto.setIdentificadorVehiculo(IdentificadorVehiculoMapper.toDTO(model.getIdentificadorVehiculo()));
+        dto.setPlaca(model.getPlaca());
+        if (model.getPlaca() != null) {
+            dto.setIdentificadorVehiculo(
+                this.identificadorVehiculoMapper.toDTO(
+                    identificadorVehiculoRepository.findByPlaca(model.getPlaca())
+                )
+            );
+        }
         return dto;
     }
 
@@ -48,7 +63,7 @@ public class VehiculoMapper {
         model.setCombustible(dto.getCombustible());
         model.setVersion(dto.getVersion());
         model.setCondicion(dto.getCondicion());
-        model.setIdentificadorVehiculo(IdentificadorVehiculoMapper.toModel(dto.getIdentificadorVehiculo()));
+        model.setPlaca(dto.getPlaca());
         return model;
     }
 
@@ -68,6 +83,6 @@ public class VehiculoMapper {
         entity.setCombustible(dto.getCombustible());
         entity.setVersion(dto.getVersion());
         entity.setCondicion(dto.getCondicion());
-        entity.setIdentificadorVehiculo(IdentificadorVehiculoMapper.toModel(dto.getIdentificadorVehiculo()));
+        entity.setPlaca(dto.getPlaca());
     }
 }

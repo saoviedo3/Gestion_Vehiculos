@@ -16,4 +16,6 @@ public class IdentificadorVehiculoDTO {
     private String chasis;
     @Schema(description = "Número de motor", example = "MTR123456789")
     private String motor;
+    @Schema(description = "ID generado automáticamente", accessMode = Schema.AccessMode.READ_ONLY, example = "6863125741aecf5c57b57ed0")
+    private String id;
 } 

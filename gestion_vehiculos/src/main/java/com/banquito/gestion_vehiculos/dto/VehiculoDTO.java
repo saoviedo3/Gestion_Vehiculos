@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "DTO para la gestión de vehículos")
 public class VehiculoDTO {
 
-    @Schema(description = "Identificador único del vehículo", example = "1")
+    @Schema(description = "ID generado automáticamente", accessMode = Schema.AccessMode.READ_ONLY, example = "6863125741aecf5c57b57ed0")
     private String id;
 
     @NotBlank(message = "La marca es requerida")
@@ -71,8 +71,18 @@ public class VehiculoDTO {
     @Schema(description = "Condición del vehículo", example = "NUEVO, USADO")
     private CondicionVehiculoEnum condicion;
 
-    @Schema(description = "Versión para control de concurrencia", example = "1")
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long version;
 
+    @Schema(description = "Placa del vehículo para asociar el identificador", example = "ABC1234")
+    private String placa;
+
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private IdentificadorVehiculoDTO identificadorVehiculo;
+    public void setIdentificadorVehiculo(IdentificadorVehiculoDTO identificadorVehiculo) {
+        this.identificadorVehiculo = identificadorVehiculo;
+    }
+    public IdentificadorVehiculoDTO getIdentificadorVehiculo() {
+        return this.identificadorVehiculo;
+    }
 }

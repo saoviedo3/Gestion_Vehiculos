@@ -230,7 +230,7 @@ public class ConcesionarioService {
         List<Vehiculo> vehiculos = concesionario.getVehiculos();
         if (vehiculos == null) throw new ResourceNotFoundException("No hay vehículos en el concesionario");
         Vehiculo vehiculo = vehiculos.stream()
-            .filter(v -> v.getIdentificadorVehiculo() != null && v.getIdentificadorVehiculo().getPlaca().equalsIgnoreCase(placa))
+            .filter(v -> v.getPlaca() != null && v.getPlaca().equalsIgnoreCase(placa))
             .findFirst()
             .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con placa=" + placa));
         return vehiculoMapper.toDTO(vehiculo);
@@ -355,7 +355,7 @@ public class ConcesionarioService {
             .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
         List<Vehiculo> vehiculos = concesionario.getVehiculos();
         if (vehiculos == null) throw new ResourceNotFoundException("No hay vehículos en el concesionario");
-        Vehiculo vehiculo = vehiculos.stream().filter(v -> v.getIdentificadorVehiculo() != null && v.getIdentificadorVehiculo().getPlaca().equalsIgnoreCase(placa)).findFirst()
+        Vehiculo vehiculo = vehiculos.stream().filter(v -> v.getPlaca() != null && v.getPlaca().equalsIgnoreCase(placa)).findFirst()
             .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con placa=" + placa));
         vehiculo.setMarca(dto.getMarca());
         vehiculo.setModelo(dto.getModelo());
@@ -368,7 +368,6 @@ public class ConcesionarioService {
         vehiculo.setTipo(dto.getTipo());
         vehiculo.setCombustible(dto.getCombustible());
         vehiculo.setCondicion(dto.getCondicion());
-        vehiculo.setIdentificadorVehiculo(vehiculoMapper.toModel(dto).getIdentificadorVehiculo());
         vehiculo.setVersion(vehiculo.getVersion() == null ? 1L : vehiculo.getVersion() + 1);
         concesionarioRepository.save(concesionario);
         return vehiculoMapper.toDTO(vehiculo);
@@ -380,7 +379,7 @@ public class ConcesionarioService {
             .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
         List<Vehiculo> vehiculos = concesionario.getVehiculos();
         if (vehiculos == null) throw new ResourceNotFoundException("No hay vehículos en el concesionario");
-        Vehiculo vehiculo = vehiculos.stream().filter(v -> v.getIdentificadorVehiculo() != null && v.getIdentificadorVehiculo().getPlaca().equalsIgnoreCase(placa)).findFirst()
+        Vehiculo vehiculo = vehiculos.stream().filter(v -> v.getPlaca() != null && v.getPlaca().equalsIgnoreCase(placa)).findFirst()
             .orElseThrow(() -> new ResourceNotFoundException("Vehículo no encontrado con placa=" + placa));
         vehiculo.setEstado(com.banquito.gestion_vehiculos.enums.EstadoVehiculoEnum.NO_DISPONIBLE);
         vehiculo.setVersion(vehiculo.getVersion() == null ? 1L : vehiculo.getVersion() + 1);

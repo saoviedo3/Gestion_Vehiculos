@@ -15,8 +15,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import com.banquito.gestion_vehiculos.model.IdentificadorVehiculo;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,7 +34,7 @@ public class Vehiculo {
     private EstadoVehiculoEnum estado;
     private TipoVehiculoEnum tipo;
     private CombustibleVehiculoEnum combustible;
-    private IdentificadorVehiculo identificadorVehiculo;
+    private String placa;
     private Long version;
     private CondicionVehiculoEnum condicion;
 

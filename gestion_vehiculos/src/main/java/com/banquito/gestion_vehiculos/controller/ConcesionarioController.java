@@ -11,6 +11,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import com.banquito.gestion_vehiculos.repository.IdentificadorVehiculoRepository;
+import com.banquito.gestion_vehiculos.model.IdentificadorVehiculo;
+import com.banquito.gestion_vehiculos.dto.IdentificadorVehiculoDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.banquito.gestion_vehiculos.model.Vehiculo;
+import com.banquito.gestion_vehiculos.mapper.IdentificadorVehiculoMapper;
+import com.banquito.gestion_vehiculos.repository.VendedorRepository;
+import com.banquito.gestion_vehiculos.model.Vendedor;
+import com.banquito.gestion_vehiculos.mapper.VendedorMapper;
+import com.banquito.gestion_vehiculos.model.Concesionario;
+import com.banquito.gestion_vehiculos.repository.ConcesionarioRepository;
+import com.banquito.gestion_vehiculos.exception.ResourceNotFoundException;
 
 @Tag(name = "Concesionarios", description = "Operaciones relacionadas con concesionarios, vendedores y vehículos")
 @RestController
@@ -18,6 +30,16 @@ import io.swagger.v3.oas.annotations.Operation;
 public class ConcesionarioController {
 
     private final ConcesionarioService concesionarioService;
+    @Autowired
+    private IdentificadorVehiculoRepository identificadorVehiculoRepository;
+    @Autowired
+    private IdentificadorVehiculoMapper identificadorVehiculoMapper;
+    @Autowired
+    private VendedorRepository vendedorRepository;
+    @Autowired
+    private VendedorMapper vendedorMapper;
+    @Autowired
+    private ConcesionarioRepository concesionarioRepository;
 
     public ConcesionarioController(ConcesionarioService concesionarioService) {
         this.concesionarioService = concesionarioService;
@@ -147,5 +169,43 @@ public class ConcesionarioController {
     @GetMapping("/ruc/{ruc}/vehiculos/placa/{placa}")
     public ResponseEntity<VehiculoDTO> getVehiculoByPlaca(@PathVariable String ruc, @PathVariable String placa) {
         return ResponseEntity.ok(concesionarioService.findVehiculoByPlacaInConcesionario(ruc, placa));
+    }
+
+    @Operation(summary = "Crear identificador de vehículo", description = "Crea un identificador de vehículo (placa, chasis, motor)")
+    @PostMapping("/identificadores-vehiculo")
+    public ResponseEntity<IdentificadorVehiculo> createIdentificadorVehiculo(@RequestBody IdentificadorVehiculoDTO dto) {
+        IdentificadorVehiculo identificador = new IdentificadorVehiculo();
+        identificador.setPlaca(dto.getPlaca());
+        identificador.setChasis(dto.getChasis());
+        identificador.setMotor(dto.getMotor());
+        IdentificadorVehiculo saved = identificadorVehiculoRepository.save(identificador);
+        return ResponseEntity.ok(saved);
+    }
+
+    @Operation(summary = "Buscar identificador de vehículo por id", description = "Obtiene un identificador de vehículo usando su id")
+    @GetMapping("/identificadores-vehiculo/{id}")
+    public ResponseEntity<IdentificadorVehiculoDTO> getIdentificadorVehiculoById(@PathVariable String id) {
+        return identificadorVehiculoRepository.findById(id)
+            .map(identificador -> ResponseEntity.ok(identificadorVehiculoMapper.toDTO(identificador)))
+            .orElse(ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Buscar vendedores por nombre en concesionario", description = "Obtiene una lista de vendedores de un concesionario cuyo nombre contiene el texto dado (ignore case)")
+    @GetMapping("/ruc/{ruc}/vendedores/nombre/{nombre}")
+    public ResponseEntity<List<VendedorDTO>> getVendedoresByNombre(@PathVariable String ruc, @PathVariable String nombre) {
+        Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
+            .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        if (concesionario.getVendedores() == null) return ResponseEntity.ok(List.of());
+        List<VendedorDTO> dtos = concesionario.getVendedores().stream()
+            .filter(v -> {
+                if (nombre.length() == 1) {
+                    return v.getNombre() != null && v.getNombre().toLowerCase().startsWith(nombre.toLowerCase());
+                } else {
+                    return v.getNombre() != null && v.getNombre().toLowerCase().contains(nombre.toLowerCase());
+                }
+            })
+            .map(vendedorMapper::toDTO)
+            .toList();
+        return ResponseEntity.ok(dtos);
     }
 } 
