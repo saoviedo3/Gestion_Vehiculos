@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @NoArgsConstructor
@@ -74,7 +75,8 @@ public class VehiculoDTO {
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long version;
 
-    @Schema(description = "Placa del vehículo para asociar el identificador", example = "ABC1234")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Schema(accessMode = Schema.AccessMode.WRITE_ONLY)
     private String placa;
 
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)

@@ -20,6 +20,7 @@ import com.banquito.gestion_vehiculos.model.Vehiculo;
 import com.banquito.gestion_vehiculos.model.Vendedor;
 import com.banquito.gestion_vehiculos.mapper.VendedorMapper;
 import com.banquito.gestion_vehiculos.repository.ConcesionarioRepository;
+import com.banquito.gestion_vehiculos.repository.IdentificadorVehiculoRepository;
 
 @Service
 public class ConcesionarioService {
@@ -28,16 +29,19 @@ public class ConcesionarioService {
     private final ConcesionarioMapper concesionarioMapper;
     private final VehiculoMapper vehiculoMapper;
     private final VendedorMapper vendedorMapper;
+    private final IdentificadorVehiculoRepository identificadorVehiculoRepository;
 
     public ConcesionarioService(
             ConcesionarioRepository concesionarioRepository,
             ConcesionarioMapper concesionarioMapper,
             VehiculoMapper vehiculoMapper,
-            VendedorMapper vendedorMapper) {
+            VendedorMapper vendedorMapper,
+            IdentificadorVehiculoRepository identificadorVehiculoRepository) {
         this.concesionarioRepository = concesionarioRepository;
         this.concesionarioMapper = concesionarioMapper;
         this.vehiculoMapper = vehiculoMapper;
         this.vendedorMapper = vendedorMapper;
+        this.identificadorVehiculoRepository = identificadorVehiculoRepository;
     }
 
     // --------- Métodos para Concesionario ---------
@@ -179,6 +183,9 @@ public class ConcesionarioService {
     public VehiculoDTO createVehiculoInConcesionario(String ruc, VehiculoDTO dto) {
         Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
             .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
+        if (identificadorVehiculoRepository.findByPlaca(dto.getPlaca()) == null) {
+            throw new ResourceNotFoundException("No existe identificador de vehículo con placa=" + dto.getPlaca());
+        }
         Vehiculo vehiculo = vehiculoMapper.toModel(dto);
         vehiculo.setId(java.util.UUID.randomUUID().toString());
         if (vehiculo.getVersion() == null) vehiculo.setVersion(0L);

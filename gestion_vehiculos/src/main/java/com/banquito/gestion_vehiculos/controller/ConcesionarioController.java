@@ -173,7 +173,10 @@ public class ConcesionarioController {
 
     @Operation(summary = "Crear identificador de vehículo", description = "Crea un identificador de vehículo (placa, chasis, motor)")
     @PostMapping("/identificadores-vehiculo")
-    public ResponseEntity<IdentificadorVehiculo> createIdentificadorVehiculo(@RequestBody IdentificadorVehiculoDTO dto) {
+    public ResponseEntity<?> createIdentificadorVehiculo(@RequestBody IdentificadorVehiculoDTO dto) {
+        if (identificadorVehiculoRepository.findByPlaca(dto.getPlaca()) != null) {
+            return ResponseEntity.badRequest().body("Ya existe un identificador con la placa: " + dto.getPlaca());
+        }
         IdentificadorVehiculo identificador = new IdentificadorVehiculo();
         identificador.setPlaca(dto.getPlaca());
         identificador.setChasis(dto.getChasis());
