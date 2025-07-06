@@ -28,6 +28,7 @@ public class VehiculoMapper {
         dto.setId(model.getId());
         dto.setMarca(model.getMarca());
         dto.setModelo(model.getModelo());
+        dto.setCilindraje(model.getCilindraje());
         dto.setAnio(model.getAnio());
         dto.setValor(model.getValor());
         dto.setColor(model.getColor());
@@ -54,6 +55,7 @@ public class VehiculoMapper {
         model.setId(dto.getId());
         model.setMarca(dto.getMarca());
         model.setModelo(dto.getModelo());
+        model.setCilindraje(dto.getCilindraje());
         model.setAnio(dto.getAnio());
         model.setValor(dto.getValor());
         model.setColor(dto.getColor());
@@ -74,6 +76,7 @@ public class VehiculoMapper {
     public void updateEntity(Vehiculo entity, VehiculoDTO dto) {
         entity.setMarca(dto.getMarca());
         entity.setModelo(dto.getModelo());
+        entity.setCilindraje(dto.getCilindraje());
         entity.setAnio(dto.getAnio());
         entity.setValor(dto.getValor());
         entity.setColor(dto.getColor());
