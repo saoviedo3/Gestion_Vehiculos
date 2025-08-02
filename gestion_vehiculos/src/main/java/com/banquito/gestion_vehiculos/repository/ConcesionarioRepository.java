@@ -1,6 +1,7 @@
 package com.banquito.gestion_vehiculos.repository;
 
 import com.banquito.gestion_vehiculos.model.Concesionario;
+import com.banquito.gestion_vehiculos.model.Vendedor;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import com.banquito.gestion_vehiculos.enums.EstadoConcesionarioEnum;
 
@@ -24,4 +25,7 @@ public interface ConcesionarioRepository extends MongoRepository<Concesionario, 
     Optional<Concesionario> findByRuc(String ruc);
 
     boolean existsByRuc(String ruc);
+    
+    // Buscar concesionario que contiene un vendedor específico
+    Optional<Concesionario> findByVendedoresId(String vendedorId);
 }

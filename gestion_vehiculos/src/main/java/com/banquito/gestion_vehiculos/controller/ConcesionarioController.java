@@ -45,6 +45,12 @@ public class ConcesionarioController {
         this.concesionarioService = concesionarioService;
     }
 
+    @Operation(summary = "Listar todos los concesionarios", description = "Obtiene todos los concesionarios (solo admin)")
+    @GetMapping
+    public ResponseEntity<List<ConcesionarioDTO>> getAllConcesionarios() {
+        return ResponseEntity.ok(concesionarioService.findAllConcesionarios());
+    }
+
     @Operation(summary = "Buscar concesionario por RUC", description = "Obtiene un concesionario usando su RUC")
     @GetMapping("/ruc/{ruc}")
     public ResponseEntity<ConcesionarioDTO> getByRuc(@PathVariable String ruc) {
@@ -138,6 +144,8 @@ public class ConcesionarioController {
     @Operation(summary = "Crear vehículo en concesionario", description = "Crea un nuevo vehículo en un concesionario específico")
     @PostMapping("/ruc/{ruc}/vehiculos")
     public ResponseEntity<VehiculoDTO> createVehiculo(@PathVariable String ruc, @Valid @RequestBody VehiculoDTO dto) {
+        System.out.println("Recibiendo petición para crear vehículo en concesionario RUC: " + ruc);
+        System.out.println("Datos recibidos: " + dto.toString());
         return ResponseEntity.ok(concesionarioService.createVehiculoInConcesionario(ruc, dto));
     }
 
@@ -171,12 +179,23 @@ public class ConcesionarioController {
         return ResponseEntity.ok(concesionarioService.findVehiculoByPlacaInConcesionario(ruc, placa));
     }
 
+    @Operation(summary = "Listar todos los identificadores de vehículos", description = "Obtiene todos los identificadores de vehículos del sistema")
+    @GetMapping("/identificadores-vehiculo")
+    public ResponseEntity<List<IdentificadorVehiculoDTO>> getAllIdentificadoresVehiculo() {
+        List<IdentificadorVehiculo> identificadores = identificadorVehiculoRepository.findAll();
+        List<IdentificadorVehiculoDTO> dtos = identificadores.stream()
+            .map(identificadorVehiculoMapper::toDTO)
+            .toList();
+        return ResponseEntity.ok(dtos);
+    }
+
     @Operation(summary = "Crear identificador de vehículo", description = "Crea un identificador de vehículo (placa, chasis, motor)")
     @PostMapping("/identificadores-vehiculo")
     public ResponseEntity<?> createIdentificadorVehiculo(@RequestBody IdentificadorVehiculoDTO dto) {
-        if (identificadorVehiculoRepository.findByPlaca(dto.getPlaca()) != null) {
-            return ResponseEntity.badRequest().body("Ya existe un identificador con la placa: " + dto.getPlaca());
-        }
+        // Comentar temporalmente la validación de duplicados para permitir crear vehículos
+        // if (identificadorVehiculoRepository.findByPlaca(dto.getPlaca()) != null) {
+        //     return ResponseEntity.badRequest().body("Ya existe un identificador con la placa: " + dto.getPlaca());
+        // }
         IdentificadorVehiculo identificador = new IdentificadorVehiculo();
         identificador.setPlaca(dto.getPlaca());
         identificador.setChasis(dto.getChasis());
@@ -191,6 +210,18 @@ public class ConcesionarioController {
         return identificadorVehiculoRepository.findById(id)
             .map(identificador -> ResponseEntity.ok(identificadorVehiculoMapper.toDTO(identificador)))
             .orElse(ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "Listar todos los vendedores del sistema", description = "Obtiene todos los vendedores de todos los concesionarios (solo admin)")
+    @GetMapping("/vendedores")
+    public ResponseEntity<List<VendedorDTO>> getAllVendedores() {
+        return ResponseEntity.ok(concesionarioService.findAllVendedores());
+    }
+
+    @Operation(summary = "Listar todos los vehículos del sistema", description = "Obtiene todos los vehículos de todos los concesionarios (solo admin)")
+    @GetMapping("/vehiculos")
+    public ResponseEntity<List<VehiculoDTO>> getAllVehiculos() {
+        return ResponseEntity.ok(concesionarioService.findAllVehiculos());
     }
 
     @Operation(summary = "Buscar vendedores por nombre en concesionario", description = "Obtiene una lista de vendedores de un concesionario cuyo nombre contiene el texto dado (ignore case)")
@@ -210,5 +241,11 @@ public class ConcesionarioController {
             .map(vendedorMapper::toDTO)
             .toList();
         return ResponseEntity.ok(dtos);
+    }
+
+    @Operation(summary = "Buscar concesionario por email de vendedor", description = "Obtiene el concesionario al que pertenece un vendedor usando su email")
+    @GetMapping("/vendedor-email/{email}")
+    public ResponseEntity<ConcesionarioDTO> getConcesionarioByVendedorEmail(@PathVariable String email) {
+        return ResponseEntity.ok(concesionarioService.findConcesionarioByVendedorEmail(email));
     }
 } 

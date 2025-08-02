@@ -21,6 +21,7 @@ import lombok.ToString;
 public class Concesionario {
 
     private String id;
+    @org.springframework.data.mongodb.core.index.Indexed(name = "idxuConcesionario_ruc", unique = true)
     private String ruc;
     private String razonSocial;
     private String direccion;

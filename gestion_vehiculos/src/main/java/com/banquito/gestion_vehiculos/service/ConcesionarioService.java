@@ -1,6 +1,7 @@
 package com.banquito.gestion_vehiculos.service;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +46,15 @@ public class ConcesionarioService {
     }
 
     // --------- Métodos para Concesionario ---------
+
+    public List<ConcesionarioDTO> findAllConcesionarios() {
+        try {
+            List<Concesionario> lista = concesionarioRepository.findAll();
+            return lista.stream().map(concesionarioMapper::toDTO).toList();
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Error al buscar todos los concesionarios");
+        }
+    }
 
     public ConcesionarioDTO findConcesionarioByRuc(String ruc) {
         try {
@@ -181,17 +191,34 @@ public class ConcesionarioService {
 
     @Transactional
     public VehiculoDTO createVehiculoInConcesionario(String ruc, VehiculoDTO dto) {
+        System.out.println("Intentando crear vehículo en concesionario con RUC: " + ruc);
+        System.out.println("Datos del vehículo: " + dto.toString());
+        
         Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
             .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
-        if (identificadorVehiculoRepository.findByPlaca(dto.getPlaca()) == null) {
-            throw new ResourceNotFoundException("No existe identificador de vehículo con placa=" + dto.getPlaca());
-        }
+        
+        System.out.println("Concesionario encontrado: " + concesionario.getRazonSocial());
+        
+        // Comentar temporalmente la validación de unicidad de placa
+        // if (identificadorVehiculoRepository.findByPlaca(dto.getPlaca()) != null) {
+        //     throw new CreateEntityException("Vehiculo", "Ya existe un vehículo con la misma placa: " + dto.getPlaca());
+        // }
+        
+        System.out.println("Procediendo a crear vehículo...");
+        
         Vehiculo vehiculo = vehiculoMapper.toModel(dto);
         vehiculo.setId(java.util.UUID.randomUUID().toString());
         if (vehiculo.getVersion() == null) vehiculo.setVersion(0L);
+        
+        System.out.println("Vehículo mapeado, agregando al concesionario...");
+        
         if (concesionario.getVehiculos() == null) concesionario.setVehiculos(new java.util.ArrayList<>());
         concesionario.getVehiculos().add(vehiculo);
+        
+        System.out.println("Guardando concesionario...");
         concesionarioRepository.save(concesionario);
+        
+        System.out.println("Vehículo creado exitosamente con ID: " + vehiculo.getId());
         return vehiculoMapper.toDTO(vehiculo);
     }
 
@@ -255,6 +282,15 @@ public class ConcesionarioService {
         Concesionario concesionario = concesionarioRepository.findByRuc(ruc)
             .orElseThrow(() -> new ResourceNotFoundException("Concesionario no encontrado con RUC=" + ruc));
         if (concesionario.getVendedores() == null) concesionario.setVendedores(new java.util.ArrayList<>());
+        // Validación de unicidad de cédula
+        for (Concesionario c : concesionarioRepository.findAll()) {
+            if (c.getVendedores() != null) {
+                boolean cedulaExistente = c.getVendedores().stream().anyMatch(v -> v.getCedula().equals(dto.getCedula()));
+                if (cedulaExistente) {
+                    throw new CreateEntityException("Vendedor", "Ya existe un vendedor con la misma cédula: " + dto.getCedula());
+                }
+            }
+        }
         Vendedor vendedor = vendedorMapper.toModel(dto);
         vendedor.setId(java.util.UUID.randomUUID().toString());
         if (vendedor.getVersion() == null) vendedor.setVersion(0L);
@@ -414,6 +450,73 @@ public class ConcesionarioService {
             .filter(v -> v.getCondicion() != null && v.getCondicion().name().equalsIgnoreCase(condicion))
             .map(vehiculoMapper::toDTO)
             .toList();
+    }
+
+    // --------- Métodos para Admin (todos los datos) ---------
+
+    public List<VendedorDTO> findAllVendedores() {
+        try {
+            List<Concesionario> concesionarios = concesionarioRepository.findAll();
+            List<VendedorDTO> todosVendedores = new ArrayList<>();
+            
+            for (Concesionario concesionario : concesionarios) {
+                if (concesionario.getVendedores() != null) {
+                    List<VendedorDTO> vendedoresConcesionario = concesionario.getVendedores()
+                        .stream()
+                        .map(vendedorMapper::toDTO)
+                        .toList();
+                    todosVendedores.addAll(vendedoresConcesionario);
+                }
+            }
+            
+            return todosVendedores;
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Error al buscar todos los vendedores");
+        }
+    }
+
+    public List<VehiculoDTO> findAllVehiculos() {
+        try {
+            List<Concesionario> concesionarios = concesionarioRepository.findAll();
+            List<VehiculoDTO> todosVehiculos = new ArrayList<>();
+            
+            for (Concesionario concesionario : concesionarios) {
+                if (concesionario.getVehiculos() != null) {
+                    List<VehiculoDTO> vehiculosConcesionario = concesionario.getVehiculos()
+                        .stream()
+                        .map(vehiculoMapper::toDTO)
+                        .toList();
+                    todosVehiculos.addAll(vehiculosConcesionario);
+                }
+            }
+            
+            return todosVehiculos;
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Error al buscar todos los vehículos");
+        }
+    }
+
+    public ConcesionarioDTO findConcesionarioByVendedorEmail(String email) {
+        try {
+            List<Concesionario> concesionarios = concesionarioRepository.findAll();
+            
+            for (Concesionario concesionario : concesionarios) {
+                if (concesionario.getVendedores() != null) {
+                    boolean vendedorEncontrado = concesionario.getVendedores().stream()
+                        .anyMatch(vendedor -> email.equalsIgnoreCase(vendedor.getEmail()));
+                    
+                    if (vendedorEncontrado) {
+                        return concesionarioMapper.toDTO(concesionario);
+                    }
+                }
+            }
+            
+            throw new ResourceNotFoundException("No se encontró concesionario para el vendedor con email: " + email);
+        } catch (ResourceNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Error al buscar concesionario por email de vendedor: " + email);
+        }
     }
 }
 

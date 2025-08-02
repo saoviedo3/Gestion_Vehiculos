@@ -26,6 +26,7 @@ public class Vendedor {
     private String email;
     private EstadoVendedorEnum estado;
     private Long version;
+    @Indexed(name = "idxuVendedor_cedula", unique = true)
     private String cedula;
 
 }

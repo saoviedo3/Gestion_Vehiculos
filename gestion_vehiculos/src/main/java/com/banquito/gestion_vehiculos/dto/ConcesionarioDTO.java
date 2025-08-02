@@ -45,6 +45,7 @@ public class ConcesionarioDTO {
 
     @NotBlank(message = "El RUC es requerido")
     @Size(max = 20, message = "El RUC no puede exceder 20 caracteres")
+    @com.banquito.gestion_vehiculos.validation.RucEcuatoriano
     @Schema(description = "RUC del concesionario", example = "1234567890001", maxLength = 20)
     private String ruc;
 }

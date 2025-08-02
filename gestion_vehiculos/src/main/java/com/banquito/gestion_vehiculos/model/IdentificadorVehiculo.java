@@ -17,6 +17,7 @@ import org.springframework.data.annotation.Id;
 public class IdentificadorVehiculo {
     @Id
     private String id;
+    @org.springframework.data.mongodb.core.index.Indexed(name = "idxuIdentificadorVehiculo_placa", unique = true)
     private String placa;
     private String chasis;
     private String motor;
