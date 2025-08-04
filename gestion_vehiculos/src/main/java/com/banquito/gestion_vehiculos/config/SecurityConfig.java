@@ -27,21 +27,14 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
-            .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(authz -> authz
-                // Endpoints públicos
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/actuator/**").permitAll()
-                
-                // Endpoints que requieren autenticación
-                .requestMatchers("/api/concesionarios/**").authenticated()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll() 
             )
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable());
@@ -52,10 +45,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:5173", "http://localhost:5174", "http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true); // Volver a true para el frontend
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
