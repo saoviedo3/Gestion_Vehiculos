@@ -35,7 +35,7 @@ public class SecurityConfig {
             .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(authz -> authz
                 // Endpoints públicos
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/concesionarios/v1/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/error").permitAll()
