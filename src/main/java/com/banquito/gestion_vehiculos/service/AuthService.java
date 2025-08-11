@@ -9,7 +9,6 @@ import com.banquito.gestion_vehiculos.exception.ResourceNotFoundException;
 import com.banquito.gestion_vehiculos.mapper.UsuarioMapper;
 import com.banquito.gestion_vehiculos.model.Usuario;
 import com.banquito.gestion_vehiculos.model.Vendedor;
-import com.banquito.gestion_vehiculos.model.Concesionario;
 import com.banquito.gestion_vehiculos.repository.UsuarioRepository;
 import com.banquito.gestion_vehiculos.repository.VendedorRepository;
 import com.banquito.gestion_vehiculos.repository.ConcesionarioRepository;
@@ -27,7 +26,6 @@ public class AuthService {
     private final UsuarioMapper usuarioMapper;
     private final PasswordEncoder passwordEncoder;
     private final VendedorRepository vendedorRepository;
-    private final ConcesionarioRepository concesionarioRepository;
 
     public AuthService(UsuarioRepository usuarioRepository, 
                       UsuarioMapper usuarioMapper, 
@@ -38,7 +36,7 @@ public class AuthService {
         this.usuarioMapper = usuarioMapper;
         this.passwordEncoder = passwordEncoder;
         this.vendedorRepository = vendedorRepository;
-        this.concesionarioRepository = concesionarioRepository;
+
     }
 
     @Transactional

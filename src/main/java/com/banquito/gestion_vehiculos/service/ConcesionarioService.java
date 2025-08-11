@@ -10,7 +10,6 @@ import com.banquito.gestion_vehiculos.dto.ConcesionarioDTO;
 import com.banquito.gestion_vehiculos.dto.VendedorDTO;
 import com.banquito.gestion_vehiculos.dto.VehiculoDTO;
 import com.banquito.gestion_vehiculos.enums.EstadoConcesionarioEnum;
-import com.banquito.gestion_vehiculos.enums.EstadoVendedorEnum;
 import com.banquito.gestion_vehiculos.mapper.ConcesionarioMapper;
 import com.banquito.gestion_vehiculos.mapper.VehiculoMapper;
 import com.banquito.gestion_vehiculos.exception.CreateEntityException;
@@ -30,7 +29,6 @@ public class ConcesionarioService {
     private final ConcesionarioMapper concesionarioMapper;
     private final VehiculoMapper vehiculoMapper;
     private final VendedorMapper vendedorMapper;
-    private final IdentificadorVehiculoRepository identificadorVehiculoRepository;
 
     public ConcesionarioService(
             ConcesionarioRepository concesionarioRepository,
@@ -42,7 +40,6 @@ public class ConcesionarioService {
         this.concesionarioMapper = concesionarioMapper;
         this.vehiculoMapper = vehiculoMapper;
         this.vendedorMapper = vendedorMapper;
-        this.identificadorVehiculoRepository = identificadorVehiculoRepository;
     }
 
     // --------- Métodos para Concesionario ---------

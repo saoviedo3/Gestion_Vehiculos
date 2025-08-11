@@ -2,9 +2,6 @@ package com.banquito.gestion_vehiculos.mapper;
 
 import com.banquito.gestion_vehiculos.dto.VehiculoDTO;
 import com.banquito.gestion_vehiculos.model.Vehiculo;
-import com.banquito.gestion_vehiculos.model.IdentificadorVehiculo;
-import com.banquito.gestion_vehiculos.dto.IdentificadorVehiculoDTO;
-import com.banquito.gestion_vehiculos.mapper.IdentificadorVehiculoMapper;
 import com.banquito.gestion_vehiculos.repository.IdentificadorVehiculoRepository;
 
 import java.util.List;

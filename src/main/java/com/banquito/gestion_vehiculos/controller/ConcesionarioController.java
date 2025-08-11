@@ -15,10 +15,7 @@ import com.banquito.gestion_vehiculos.repository.IdentificadorVehiculoRepository
 import com.banquito.gestion_vehiculos.model.IdentificadorVehiculo;
 import com.banquito.gestion_vehiculos.dto.IdentificadorVehiculoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.banquito.gestion_vehiculos.model.Vehiculo;
 import com.banquito.gestion_vehiculos.mapper.IdentificadorVehiculoMapper;
-import com.banquito.gestion_vehiculos.repository.VendedorRepository;
-import com.banquito.gestion_vehiculos.model.Vendedor;
 import com.banquito.gestion_vehiculos.mapper.VendedorMapper;
 import com.banquito.gestion_vehiculos.model.Concesionario;
 import com.banquito.gestion_vehiculos.repository.ConcesionarioRepository;
@@ -34,8 +31,6 @@ public class ConcesionarioController {
     private IdentificadorVehiculoRepository identificadorVehiculoRepository;
     @Autowired
     private IdentificadorVehiculoMapper identificadorVehiculoMapper;
-    @Autowired
-    private VendedorRepository vendedorRepository;
     @Autowired
     private VendedorMapper vendedorMapper;
     @Autowired
