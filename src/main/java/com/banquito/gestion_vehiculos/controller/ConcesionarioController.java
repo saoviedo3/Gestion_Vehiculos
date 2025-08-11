@@ -26,7 +26,7 @@ import com.banquito.gestion_vehiculos.exception.ResourceNotFoundException;
 
 @Tag(name = "Concesionarios", description = "Operaciones relacionadas con concesionarios, vendedores y vehículos")
 @RestController
-@RequestMapping("/api/concesionarios")
+@RequestMapping("/api/concesionarios/v1")
 public class ConcesionarioController {
 
     private final ConcesionarioService concesionarioService;

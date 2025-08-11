@@ -14,7 +14,7 @@ import java.util.List;
 
 @Tag(name = "Autenticación", description = "Operaciones de autenticación y gestión de usuarios")
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/auth/v1")
 public class AuthController {
 
     private final AuthService authService;
