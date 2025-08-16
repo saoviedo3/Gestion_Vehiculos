@@ -1,7 +1,7 @@
 # Configuración de Swagger/OpenAPI - Gestión de Vehículos
 
 ## Descripción
-Esta aplicación tiene configurado Swagger/OpenAPI para documentar y probar la API REST de Gestión de Vehículos del Banco del Pacífico.
+Esta aplicación tiene configurado Swagger/OpenAPI para documentar y probar la API REST de Gestión de Vehículos
 
 ## URLs de Acceso
 
