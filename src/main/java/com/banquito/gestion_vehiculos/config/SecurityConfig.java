@@ -36,9 +36,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 // Endpoints públicos
                 .requestMatchers("/api/concesionarios/v1/auth/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/error").permitAll()
+                .requestMatchers("/").permitAll()
                 
                 // Endpoints que requieren autenticación
                 .requestMatchers("/api/concesionarios/**").authenticated()
@@ -60,7 +61,9 @@ public class SecurityConfig {
             "http://localhost:4173",
             "http://127.0.0.1:5173",
             "http://127.0.0.1:5174",
-            "http://127.0.0.1:3000"
+            "http://127.0.0.1:3000",
+            "http://banquito-alb-1166574131.us-east-2.elb.amazonaws.com",
+            "https://banquito-alb-1166574131.us-east-2.elb.amazonaws.com"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
