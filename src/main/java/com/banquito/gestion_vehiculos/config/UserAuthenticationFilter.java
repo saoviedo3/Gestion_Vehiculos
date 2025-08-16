@@ -21,18 +21,6 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
                                   HttpServletResponse response, 
                                   FilterChain filterChain) throws ServletException, IOException {
         
-        // Permitir que las peticiones de Swagger y test pasen sin autenticación
-        String requestURI = request.getRequestURI();
-        if (requestURI.startsWith("/swagger-ui") || 
-            requestURI.startsWith("/v3/api-docs") || 
-            requestURI.startsWith("/webjars") ||
-            requestURI.startsWith("/api/test") ||
-            requestURI.equals("/") ||
-            requestURI.equals("/favicon.ico")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        
         // Obtener el email del header (el frontend enviará el email del usuario logueado)
         String userEmail = request.getHeader("X-User-Email");
         
