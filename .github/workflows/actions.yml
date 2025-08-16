@@ -9,9 +9,9 @@ on:
 env:
   AWS_REGION: us-east-2
   ECR_REGISTRY: 425784381978.dkr.ecr.us-east-2.amazonaws.com
-  ECR_REPOSITORY: banquito-banco-vehiculos
+  ECR_REPOSITORY: banquito-prestamos-vehiculos
   ECS_CLUSTER: banquito-cluster
-  ECS_SERVICE: banquito-banco-vehiculos
+  ECS_SERVICE: banquito-prestamos-vehiculos
   CONTAINER_NAME: vehiculos-container
 
 jobs:
