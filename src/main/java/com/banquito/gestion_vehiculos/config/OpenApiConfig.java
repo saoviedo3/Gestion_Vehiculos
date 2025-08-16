@@ -21,11 +21,11 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API de Gestión de Vehículos - Banco del Pacífico")
-                        .description("API REST para la gestión de vehículos, concesionarios y vendedores del Banco del Pacífico")
+                        .title("API de Gestión de Vehículos - Concesionario")
+                        .description("API REST para la gestión de vehículos, concesionarios y vendedores")
                         .version("1.0.0")
                         .contact(new Contact()
-                                .name("Banco del Pacífico")
+                                .name("Concesionario")
                                 .email("soporte@banquito.com.ec")
                                 .url("https://www.banquito.com.ec"))
                         .license(new License()
@@ -33,10 +33,10 @@ public class OpenApiConfig {
                                 .url("https://www.banquito.com.ec/licencias")))
                 .servers(List.of(
                         new Server()
-                                .url("http://banquito-alb-1166574131.us-east-2.elb.amazonaws.com")
+                                .url("http://banquito-alb-1166574131.us-east-2.elb.amazonaws.com/api/vehiculos")
                                 .description("Servidor de Producción - AWS ALB"),
                         new Server()
-                                .url("http://localhost:" + serverPort)
+                                .url("http://localhost:" + serverPort + "/api/vehiculos")
                                 .description("Servidor Local")
                 ));
     }

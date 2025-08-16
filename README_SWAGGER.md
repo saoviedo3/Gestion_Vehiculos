@@ -70,6 +70,23 @@ La aplicación permite acceso desde:
 3. **Probar API**: Usa el botón "Try it out" para ejecutar requests
 4. **Autenticación**: Para endpoints protegidos, usa el endpoint de login primero
 
+## Solución de Problemas
+
+### Si Swagger se carga pero no muestra endpoints:
+
+1. **Verificar logs**: Revisa los logs de la aplicación para errores
+2. **Probar endpoints de prueba**: Accede a `/api/test/hello` para verificar que la API funcione
+3. **Verificar contexto**: Asegúrate de que el context-path esté configurado correctamente
+4. **Reiniciar aplicación**: A veces es necesario reiniciar después de cambios de configuración
+
+### Endpoints de prueba disponibles:
+- `GET /api/test/hello` - Mensaje de prueba
+- `GET /api/test/status` - Estado del sistema
+
+### Configuraciones de perfil:
+- **Desarrollo**: Usa `application-dev.properties` para logging detallado
+- **AWS**: Usa `application-aws.properties` para producción
+
 ## Dependencias
 - `springdoc-openapi-starter-webmvc-ui` (v2.5.0)
 - `swagger-annotations` (v2.2.15)

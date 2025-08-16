@@ -36,10 +36,13 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 // Endpoints públicos
                 .requestMatchers("/api/concesionarios/v1/auth/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                .requestMatchers("/api/test/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui.css", "/swagger-ui-bundle.js", "/swagger-ui-standalone-preset.js").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/").permitAll()
+                .requestMatchers("/webjars/**").permitAll()
+                .requestMatchers("/favicon.ico").permitAll()
                 
                 // Endpoints que requieren autenticación
                 .requestMatchers("/api/concesionarios/**").authenticated()
