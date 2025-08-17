@@ -36,13 +36,14 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 // Endpoints públicos
                 .requestMatchers("/api/concesionarios/v1/auth/**").permitAll()
+                .requestMatchers("/api/concesionarios/v1/**").permitAll() // Permitir acceso público a concesionarios
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/error").permitAll()
                 .requestMatchers("/").permitAll()
+                .requestMatchers("/health").permitAll()
                 
                 // Endpoints que requieren autenticación
-                .requestMatchers("/api/concesionarios/**").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form.disable())
